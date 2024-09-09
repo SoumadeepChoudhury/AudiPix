@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AudiPix</string>
+    <string name="edit_name">Enter the new name.</string>
+    <string name="edit_text">Enter your text here.</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="company_tag">Ahens | An Initiative to Initial</string>
+</resources>

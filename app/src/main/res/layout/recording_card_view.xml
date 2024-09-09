@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_200sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="@dimen/_20sdp"
+    app:cardCornerRadius="@dimen/_10sdp"
+    android:layout_marginStart="@dimen/_10sdp"
+    android:layout_marginVertical="@dimen/_10sdp"
+    android:layout_marginEnd="@dimen/_10sdp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+            <TextView
+                android:id="@+id/titleTxt"
+                android:layout_width="@dimen/_190sdp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="cursive"
+                android:singleLine="true"
+                android:textSize="@dimen/_20sdp"
+                app:layout_constraintBottom_toTopOf="@+id/record"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.057"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/recordAnimation"
+                app:layout_constraintVertical_bias="0.021" />
+
+        <ImageView
+            android:id="@+id/deleteCardItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/delete_all"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.867"
+            app:layout_constraintStart_toEndOf="@+id/titleTxt"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.069" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/recordAnimation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/recording" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recordAnimation"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/play" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
