@@ -1,12 +1,13 @@
 package com.example.audipix;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -17,7 +18,6 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,11 +25,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +35,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class Content extends AppCompatActivity {
-
+    static String filePath = "";
     //Initialising Content List
     ArrayList<Object> ContentList;
     RecyclerView cardDisplayRecyclerView;
@@ -48,21 +46,12 @@ public class Content extends AppCompatActivity {
     public ActivityResultLauncher<Intent> startForCameraResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
-            if(result.getResultCode()==RESULT_OK && result.getData()!=null){
+            if(result.getResultCode()==RESULT_OK){
                 Image image=(Image) ContentList.get(ContentList.size()-1);
-                SimpleDateFormat format = new SimpleDateFormat("HH.mm.ss", Locale.getDefault());
-                String dateTime = format.format(new Date());
-                String fileName=masterDirectory+"/"+folderName+"/"+"Image" + dateTime + ".jpeg";
-                image.fileName="Image" + dateTime + ".jpeg";
                 try {
-                    Bundle bundle=result.getData().getExtras();
-                    ByteArrayOutputStream b=new ByteArrayOutputStream();
-                    ((Bitmap) bundle.get("data")).compress(Bitmap.CompressFormat.JPEG,100,b);
-                    byte[] arr=b.toByteArray();
-                    FileOutputStream f=new FileOutputStream(new File(fileName));
-                    f.write(arr);
-                    f.close();
-                    b.close();
+                    Files.move(Paths.get(Content.filePath),Paths.get(image.masterDirectory+"/"+image.folderName+"/"+image.fileName),REPLACE_EXISTING);
+                    Files.deleteIfExists(Paths.get(Content.filePath));
+                    Content.filePath = "";
                     image.imageView.setVisibility(View.VISIBLE);
                     image.titleTxt.setText(image.fileName);
                     image.imageView.setImageURI(Uri.fromFile(new File(masterDirectory + "/" + folderName + "/" + image.fileName)));
@@ -82,17 +71,12 @@ public class Content extends AppCompatActivity {
                 Image image=(Image) ContentList.get(ContentList.size()-1);
                 SimpleDateFormat format = new SimpleDateFormat("HH.mm.ss", Locale.getDefault());
                 String dateTime = format.format(new Date());
-                String fileName=masterDirectory+"/"+folderName+"/"+"Image" + dateTime + ".jpeg";
-                image.fileName="Image" + dateTime + ".jpeg";
+                String fileName=masterDirectory+"/"+folderName+"/"+"Image" + dateTime + ".png";
+                image.fileName="Image" + dateTime + ".png";
                 try {
-                    Bitmap bitmap= MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),(Uri) result.getData().getData());
-                    ByteArrayOutputStream b=new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG,100,b);
-                    byte[] arr=b.toByteArray();
-                    FileOutputStream f=new FileOutputStream(new File(fileName));
-                    f.write(arr);
-                    f.close();
-                    b.close();
+                    Uri selectedImageUri = result.getData().getData();
+                    String filePath = getRealPathFromURI(selectedImageUri);
+                    Files.copy(Paths.get(filePath),Paths.get(fileName),REPLACE_EXISTING);
                     image.imageView.setVisibility(View.VISIBLE);
                     image.titleTxt.setText(image.fileName);
                     image.imageView.setImageURI(Uri.fromFile(new File(masterDirectory + "/" + folderName + "/" + image.fileName)));
@@ -104,6 +88,17 @@ public class Content extends AppCompatActivity {
             }
         }
     });
+
+    public String getRealPathFromURI(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        @SuppressWarnings("deprecation")
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
 
     public boolean createFolder(String path){
         File dir=new File(path);
@@ -207,7 +202,7 @@ public class Content extends AppCompatActivity {
                 else if(fileName.contains(".txt")){
                     ContentList.add(new Text(masterDirectory,folderName,fileName,floatingMic,floatingEdit,floatingImage));
                 }
-                else if (fileName.contains(".jpeg")){
+                else if (fileName.contains(".png")){
                     ContentList.add(new Image(masterDirectory,folderName,fileName,startForCameraResult,startForGalleryResult));
                 }
             }
