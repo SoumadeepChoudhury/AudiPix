@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -60,6 +61,12 @@ public class Content extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+            } else{
+                try {
+                    Files.deleteIfExists(Paths.get(Content.filePath));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     });
