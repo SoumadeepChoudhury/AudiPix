@@ -203,6 +203,14 @@ public class Content extends AppCompatActivity {
             for(int i=0;i<files.length;i++) {
                 String[] file=files[i].toString().split("/");
                 String fileName=file[file.length-1];
+                //If FileName contains "jpg" or "jpeg" rename to "png"
+                if(fileName.contains(".jpeg") || fileName.contains(".jpg")){
+                    //Rename
+                    String extension = fileName.contains(".jpg") ? ".jpg" : ".jpeg";
+                    File existingFile = new File(masterDirectory+"/"+folderName+"/"+fileName);
+                    existingFile.renameTo(new File(masterDirectory+"/"+folderName+"/"+fileName.replace(extension,".png")));
+                    fileName = fileName.replace(extension,".png");
+                }
                 if(fileName.contains(".mp3")) {
                     ContentList.add(new Recording(true,masterDirectory,folderName,fileName));
                 }

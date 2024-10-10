@@ -105,7 +105,11 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show();
             if(ActivityCompat.checkSelfPermission(MainActivity.this,PERMISSION_RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(MainActivity.this,PERMISSION_CAMERA)!=PackageManager.PERMISSION_GRANTED)
                 ActivityCompat.requestPermissions(MainActivity.this,new String[]{PERMISSION_RECORD_AUDIO,PERMISSION_CAMERA},PERMISSION_REQ_CODE);
-            createFolder(masterDirectory);
+            if(new File(masterDirectory).exists()){
+                listOfFolders = getFolders(masterDirectory);
+            }else {
+                createFolder(masterDirectory);
+            }
             isPermitted=true;
         } else if (!ActivityCompat.shouldShowRequestPermissionRationale(this, PERMISSION_RECORD_AUDIO) && !ActivityCompat.shouldShowRequestPermissionRationale(this, PERMISSION_CAMERA) && !ActivityCompat.shouldShowRequestPermissionRationale(this, PERMISSION_READ_EXTERNAL_STORAGE) && !ActivityCompat.shouldShowRequestPermissionRationale(this, PERMISSION_WRITE_EXTERNAL_STORAGE)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -163,11 +167,14 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode==PERMISSION_REQ_CODE){
             if(permissions.length>=2){
                 if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    isPermitted=true;
-                    if(createFolder(masterDirectory))
+                    if(new File(masterDirectory).exists()){
+                        listOfFolders = getFolders(masterDirectory);
+                    } else if(createFolder(masterDirectory))
                         Toast.makeText(this, "Master Directory created...", Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(this, "Error in creating master directory. Contact the developer...", Toast.LENGTH_SHORT).show();
+
+                    isPermitted=true;
                 }
             }
         }
