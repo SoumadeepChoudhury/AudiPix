@@ -67,7 +67,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="imagePath" value="$USER_HOME$/Downloads/Untitled design-2.png" />
+                                                <entry key="imagePath" value="$USER_HOME$/Downloads" />
                                                 <entry key="scalingPercent" value="99" />
                                               </map>
                                             </option>
@@ -91,8 +91,8 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="$USER_HOME$/Downloads/Untitled design.png" />
-                                                <entry key="scalingPercent" value="61" />
+                                                <entry key="imagePath" value="$USER_HOME$/Downloads/androidfitsSystemWindows=true.png" />
+                                                <entry key="scalingPercent" value="67" />
                                               </map>
                                             </option>
                                           </PersistentState>

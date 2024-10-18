@@ -30,7 +30,8 @@
         <activity
             android:name=".Content"
             android:theme="@style/Theme.AudiPix"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".SplashScreen"
             android:exported="true" >
